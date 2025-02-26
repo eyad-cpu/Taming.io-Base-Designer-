@@ -4,9 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taming.io Base Designer</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* General styling for the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #toolbar button {
+            padding: 10px 20px;
+            background-color: #6f4e37;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+
+        #toolbar button:hover {
+            background-color: #5a3b29;
+        }
+
+        #toolbar select,
+        #toolbar input {
+            padding: 8px;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+
+        #designCanvas {
+            border: 2px solid #333;
+            display: block;
+            margin: 0 auto;
+            background-color: #e0e0e0;
+        }
+
+    </style>
 </head>
 <body>
+
     <div id="container">
         <h1>Taming.io Base Designer</h1>
         <div id="toolbar">
@@ -30,7 +86,118 @@
         </div>
         <canvas id="designCanvas" width="600" height="600"></canvas>
     </div>
-    
-    <script src="script.js"></script>
+
+    <script>
+        // JavaScript code to make the base designer interactive
+        let selectedStructure = "wall"; // Default structure
+        let wallColor = "#888888"; // Default wall color
+        const canvas = document.getElementById('designCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let structures = [];
+        const structureSize = 50; // The size of each structure (wall, tower, etc.)
+
+        // Update structure selection
+        document.getElementById('structureSelector').addEventListener('change', (event) => {
+            selectedStructure = event.target.value;
+        });
+
+        // Update wall color
+        document.getElementById('wallColor').addEventListener('input', (event) => {
+            wallColor = event.target.value;
+        });
+
+        // Start drawing on mouse down
+        canvas.addEventListener('mousedown', (event) => {
+            isDrawing = true;
+            draw(event);
+        });
+
+        // Stop drawing on mouse up or mouse out
+        canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+        });
+        canvas.addEventListener('mouseout', () => {
+            isDrawing = false;
+        });
+
+        // Draw structure when mouse is dragged
+        canvas.addEventListener('mousemove', (event) => {
+            if (isDrawing) {
+                draw(event);
+            }
+        });
+
+        function draw(event) {
+            const x = event.offsetX - (event.offsetX % structureSize); // Snap to grid
+            const y = event.offsetY - (event.offsetY % structureSize); // Snap to grid
+
+            // Different structures and their respective drawing logic
+            if (selectedStructure === "wall") {
+                ctx.fillStyle = wallColor;
+                ctx.fillRect(x, y, structureSize, structureSize);
+                structures.push({ type: "wall", x, y, color: wallColor });
+            } else if (selectedStructure === "gate") {
+                ctx.fillStyle = "brown";
+                ctx.fillRect(x, y, structureSize, structureSize);
+                structures.push({ type: "gate", x, y });
+            } else if (selectedStructure === "fireTower") {
+                ctx.fillStyle = "red";
+                ctx.beginPath();
+                ctx.arc(x + structureSize / 2, y + structureSize / 2, structureSize / 2, 0, 2 * Math.PI);
+                ctx.fill();
+                structures.push({ type: "fireTower", x, y });
+            } else if (selectedStructure === "repairTower") {
+                ctx.fillStyle = "green";
+                ctx.fillRect(x, y, structureSize, structureSize);
+                structures.push({ type: "repairTower", x, y });
+            } else if (selectedStructure === "electricTower") {
+                ctx.fillStyle = "yellow";
+                ctx.fillRect(x, y, structureSize, structureSize);
+                structures.push({ type: "electricTower", x, y });
+            } else if (selectedStructure === "spectrumTower") {
+                ctx.fillStyle = "purple";
+                ctx.fillRect(x, y, structureSize, structureSize);
+                structures.push({ type: "spectrumTower", x, y });
+            } else if (selectedStructure === "iceTower") {
+                ctx.fillStyle = "blue";
+                ctx.beginPath();
+                ctx.arc(x + structureSize / 2, y + structureSize / 2, structureSize / 2, 0, 2 * Math.PI);
+                ctx.fill();
+                structures.push({ type: "iceTower", x, y });
+            } else if (selectedStructure === "healpad") {
+                ctx.fillStyle = "white";
+                ctx.fillRect(x, y, structureSize, structureSize);
+                structures.push({ type: "healpad", x, y });
+            } else if (selectedStructure === "windmill") {
+                ctx.fillStyle = "lightgray";
+                ctx.fillRect(x, y, structureSize, structureSize);
+                structures.push({ type: "windmill", x, y });
+            } else if (selectedStructure === "bearTrap") {
+                ctx.fillStyle = "darkgray";
+                ctx.beginPath();
+                ctx.arc(x + structureSize / 2, y + structureSize / 2, structureSize / 2, 0, 2 * Math.PI);
+                ctx.fill();
+                structures.push({ type: "bearTrap", x, y });
+            }
+        }
+
+        // Clear canvas
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            structures = [];
+        }
+
+        // Save the design as an image
+        function saveDesign() {
+            const dataURL = canvas.toDataURL();
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = "base-design.png";
+            link.click();
+        }
+    </script>
+
 </body>
 </html>
+
