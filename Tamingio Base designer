@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taming.io Base Designer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <h1>Taming.io Base Designer</h1>
+        <div id="toolbar">
+            <button onclick="clearCanvas()">Clear</button>
+            <button onclick="saveDesign()">Save</button>
+            <label for="structureSelector">Select Structure: </label>
+            <select id="structureSelector">
+                <option value="wall">Wall</option>
+                <option value="gate">Gate</option>
+                <option value="fireTower">Fire Tower</option>
+                <option value="repairTower">Repair Tower</option>
+                <option value="electricTower">Electric Tower</option>
+                <option value="spectrumTower">Spectrum Tower</option>
+                <option value="iceTower">Ice Tower</option>
+                <option value="healpad">Healpad</option>
+                <option value="windmill">Windmill</option>
+                <option value="bearTrap">Bear Trap</option>
+            </select>
+            <label for="wallColor">Wall Color: </label>
+            <input type="color" id="wallColor" value="#888888">
+        </div>
+        <canvas id="designCanvas" width="600" height="600"></canvas>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
